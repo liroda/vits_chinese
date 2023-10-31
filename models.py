@@ -253,7 +253,7 @@ class Generator(torch.nn.Module):
         for i, (u, k) in enumerate(zip(upsample_rates, upsample_kernel_sizes)):
             self.ups.append(weight_norm(
                 ConvTranspose1d(upsample_initial_channel//(2**i), upsample_initial_channel//(2**(i+1)),
-                                k, u, padding=(k-u)//2)))
+                                k, u, padding=(k-u)//2 + (k-u)%2,out_padding=(k-u)%2))
 
         self.resblocks = nn.ModuleList()
         for i in range(len(self.ups)):
